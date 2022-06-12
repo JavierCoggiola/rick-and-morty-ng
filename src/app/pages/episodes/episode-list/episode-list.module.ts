@@ -3,9 +3,12 @@ import { CommonModule } from '@angular/common';
 import { EpisodeListRoutingModule } from './episode-list-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { EpisodesModule } from '../episodes.module';
+import { EpisodeListComponent } from './episode-list.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    EpisodeListComponent
+  ],
   imports: [
     CommonModule,
     EpisodeListRoutingModule,

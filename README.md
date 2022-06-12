@@ -1,27 +1,32 @@
-# RickAndMortyApp
+# Rick And Morty App By Javier COGGIOLA
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.0.0.
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Run `npm install` and after `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
+## About
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+This is a technical test for `Aplazo`.
 
-## Build
+Angular application (latest version) that consumes the next API Rest
+"https://rickandmortyapi.com/".
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+#Load pages by lazy loading.
 
-## Running unit tests
+#Character page:
+Show character list
+when clicking on a character redirects to the character's detail.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+#Locations screen:
+Show list of locations
+when clicking on a location, show the list of characters.
 
-## Running end-to-end tests
+#Episode screen:
+Show episode list
+when clicking on an episode, show the list of characters.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+#Search:
+Implement a search that, depending on the page you are on, filters by "name"
+characters, locations of episodes.

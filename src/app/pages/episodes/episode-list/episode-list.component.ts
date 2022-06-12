@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, debounceTime } from 'rxjs';
+import { BehaviorSubject, debounceTime, Subscription } from 'rxjs';
 import { Episode } from '../interfaces/episode.interface';
 import { EpisodeService } from '../services/episode.service';
 
@@ -9,11 +9,13 @@ import { EpisodeService } from '../services/episode.service';
   templateUrl: './episode-list.component.html',
   styleUrls: ['./episode-list.component.css']
 })
-export class EpisodeListComponent implements OnInit {
+export class EpisodeListComponent implements OnInit, OnDestroy {
  
   searchPlaceholderText:string = "Buscar por episodio";
 
   episodes: Episode[] = [];
+
+  subscriptions: Subscription[] = [];
   
   isLoadingData:boolean = false;
   
@@ -34,14 +36,16 @@ export class EpisodeListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Seteamos debounceTime de rxjs para no saturar en llamadas al servidor
-    this.searchUpdate$
+    this.subscriptions.push(
+      // Seteamos debounceTime de rxjs para no saturar en llamadas al servidor
+      this.searchUpdate$
       .pipe(debounceTime(250))
       .subscribe((value) => {
         this.episodes = [];
         this.pageIndex = 1;
         this.searchEpisodes(value);
-      });
+      })
+    );
   }
 
   /**
@@ -66,7 +70,8 @@ export class EpisodeListComponent implements OnInit {
    */
   searchEpisodes(episode:string = ""): void {
     this.isLoadingData = true;
-    this.episodeSvc
+    this.subscriptions.push(
+      this.episodeSvc
       .searchEpisodes(episode, this.pageIndex)
       .subscribe({
         next: 
@@ -86,7 +91,8 @@ export class EpisodeListComponent implements OnInit {
             this.isLoadingData = false;
             console.log(error)
         }
-      });
+      })
+    );
   }
 
   /**
@@ -95,6 +101,10 @@ export class EpisodeListComponent implements OnInit {
    */
   goToEpisodeDetail(episode:Episode):void {
     this.router.navigate(['/episodes', episode.id]);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
 }

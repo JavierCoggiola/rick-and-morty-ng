@@ -5,9 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Location } from '../interfaces/location.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class LocationService {
 
   constructor(private http: HttpClient) {}
@@ -29,8 +27,18 @@ export class LocationService {
       }));
   }
 
-  // getDetails(id: number) {
-  //   return this.http.get<Episode>(`${environment.baseUrlAPI}/${id}`)
-  //   .pipe(catchError((err) => this.handleHttpError(err)));
-  // }
+  /**
+   * Obtiene el detalle de una location desde la API rickandmorty
+   * @param id 
+   * @returns Location
+   */
+   getLocationDetails(id: number):Observable<Location> {
+    const url = `${environment.baseUrlAPI + environment.locationUrlAPI}${id}`;
+    return this.http.get<Location>(url)
+    .pipe(
+      map(response => response),
+      catchError( error => {
+        return throwError(() => error);
+      }));
+  }
 }

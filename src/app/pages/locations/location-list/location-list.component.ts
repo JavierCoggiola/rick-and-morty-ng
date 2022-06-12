@@ -1,18 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LocationService } from '../services/location.service';
 import { Location } from '../interfaces/location.interface';
+import { BehaviorSubject, debounceTime, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-location-list',
   templateUrl: './location-list.component.html',
   styleUrls: ['./location-list.component.css']
 })
-export class LocationListComponent implements OnInit {
+export class LocationListComponent implements OnInit, OnDestroy {
 
   searchPlaceholderText:string = "Buscar por ubicación";
 
   locations: Location[] = [];
   
+  subscriptions: Subscription[] = [];
+
   isLoadingData:boolean = false;
   
   pageIndex:number = 1;
@@ -21,14 +25,27 @@ export class LocationListComponent implements OnInit {
 
   private searchValue: string = "";
 
+  private searchUpdate: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  
+  searchUpdate$ = this.searchUpdate.asObservable();
+
   constructor(
     private locationSvc: LocationService,
+    private router:Router
   ) {
   }
 
   ngOnInit(): void {
-    // Llamamos al listado de personajes sin definir un filtro
-    this.searchLocations();
+    this.subscriptions.push(
+      // Seteamos debounceTime de rxjs para no saturar en llamadas al servidor
+      this.searchUpdate$
+      .pipe(debounceTime(250))
+      .subscribe((value) => {
+        this.locations = [];
+        this.pageIndex = 1;
+        this.searchLocations(value);
+      })
+    );
   }
 
   /**
@@ -44,9 +61,7 @@ export class LocationListComponent implements OnInit {
    */
   onChangeSearchEpisodes(location:string = ""): void {
     this.searchValue = location;
-    this.locations = [];
-    this.pageIndex = 1;
-    this.searchLocations(location);
+    this.searchUpdate.next(location);
   }
 
   /**
@@ -55,23 +70,40 @@ export class LocationListComponent implements OnInit {
    */
   searchLocations(location:string = ""): void {
     this.isLoadingData = true;
-    this.locationSvc
+    this.subscriptions.push(
+      this.locationSvc
       .searchLocations(location, this.pageIndex)
-      .subscribe((res: any) => {
-        if (res?.results?.length) {
-          const { info, results } = res;
-          this.locations = [...results];
-          this.totalItems = info.count;
-        } else {
+      .subscribe({
+        next: (res: any) => {
+          if (res?.results?.length) {
+            const { info, results } = res;
+            this.locations = [...results];
+            this.totalItems = info.count;
+          } else {
+            this.totalItems = 0;
+            this.locations = [];
+          }
+          this.isLoadingData = false;
+        },
+        error: (error:any) => {
           this.totalItems = 0;
-          this.locations = [];
+          this.isLoadingData = false;
+          console.log(error)
         }
-        this.isLoadingData = false;
-      }, (error:any) => {
-        this.totalItems = 0;
-        this.isLoadingData = false;
-        console.log(error)
-      });
+      })
+    );
+  }
+
+  /**
+   * Route to location detail
+   * @param location 
+   */
+   goToLocationDetail(location:Location):void {
+    this.router.navigate(['/locations', location.id]);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
 }

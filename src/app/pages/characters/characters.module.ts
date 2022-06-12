@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CharacterListComponent } from './character-list/character-list.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CharacterDetailComponent } from './character-detail/character-detail.component';
 import { RouterModule, Routes } from '@angular/router';
@@ -16,7 +15,6 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    CharacterListComponent,
     CharacterDetailComponent,
   ],
   imports: [

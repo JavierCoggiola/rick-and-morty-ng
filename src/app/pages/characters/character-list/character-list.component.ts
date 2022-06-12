@@ -1,8 +1,8 @@
 import {
-  Component, OnInit,
+  Component, OnDestroy, OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, debounceTime } from 'rxjs';
+import { BehaviorSubject, debounceTime, Subscription } from 'rxjs';
 import { Character } from '../interfaces/character.interface';
 import { CharacterService } from '../services/character.service';
 
@@ -11,12 +11,14 @@ import { CharacterService } from '../services/character.service';
   templateUrl: './character-list.component.html',
   styleUrls: ['./character-list.component.css'],
 })
-export class CharacterListComponent implements OnInit {
+export class CharacterListComponent implements OnInit, OnDestroy {
 
   searchPlaceholderText:string = "Buscar por personaje";
 
   characters: Character[] = [];
   
+  subscriptions: Subscription[] = [];
+
   isLoadingData:boolean = false;
   
   pageIndex:number = 1;
@@ -36,14 +38,16 @@ export class CharacterListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Seteamos debounceTime de rxjs para no saturar en llamadas al servidor
-    this.searchUpdate$
+    this.subscriptions.push(
+      // Seteamos debounceTime de rxjs para no saturar en llamadas al servidor
+      this.searchUpdate$
       .pipe(debounceTime(250))
       .subscribe((value) => {
         this.characters = [];
         this.pageIndex = 1;
         this.searchCharacters(value);
-      });
+      })
+    );
   }
 
   /**
@@ -68,7 +72,8 @@ export class CharacterListComponent implements OnInit {
    */
   searchCharacters(character:string = ""): void {
     this.isLoadingData = true;
-    this.characterSvc
+    this.subscriptions.push(
+      this.characterSvc
       .searchCharacters(character, this.pageIndex)
       .subscribe({
         next: (res: any) => {
@@ -87,7 +92,8 @@ export class CharacterListComponent implements OnInit {
           this.isLoadingData = false;
           console.log(error)
         }
-      });
+      })
+    );
   }
 
   /**
@@ -96,6 +102,10 @@ export class CharacterListComponent implements OnInit {
    */
   goToCharacterDetail(character:Character):void {
     this.router.navigate(['/characters', character.id]);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
     
 }

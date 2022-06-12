@@ -17,8 +17,8 @@ const routes: Routes = [
   { path: 'locations', 
     loadChildren: () => 
       import(
-        './pages/locations/location-list/location-list.module'
-      ).then(m => m.LocationListModule) },
+        './pages/locations/locations.module'
+      ).then(m => m.LocationsModule) },
   {path: '**', component:PageNotFoundComponent},
 ];
 

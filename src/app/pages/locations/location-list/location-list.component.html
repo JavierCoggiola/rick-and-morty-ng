@@ -1,16 +1,19 @@
-<app-search-box [searchPlaceholderText]="searchPlaceholderText" (emitSearchBoxValue)="onChangeSearchEpisodes($event)"></app-search-box>
+<div nz-row nzJustify="center">
+	<app-search-box [searchPlaceholderText]="searchPlaceholderText" (emitSearchBoxValue)="onChangeSearchEpisodes($event)"></app-search-box>
+</div>
 
 <nz-spin [nzSpinning]="isLoadingData" [nzDelay]="10">
-		<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }">
-			<div *ngFor="let location of locations" nz-col class="gutter-row" nzXs="24" nzSm="24" nzMd="12" nzLg="8" nzXl="6">
+
+		<div nz-row nzJustify="space-around">
+			<div *ngFor="let location of locations" (click)="goToLocationDetail(location)" nz-col nzXs="20" nzSm="12" nzMd="8" nzLg="5" nzXl="5" class="m-1 mt-3">
 				<div class="inner-box">
 					<app-location [location]="location"></app-location>
 				</div>
 			</div>
 			<div
 				nz-col
-				[nzSpan]="24"
-				class="container-notFound"
+				[nzSpan]="20"
+				class="container-notFound m-3"
 				*ngIf="locations.length <= 0 && !isLoadingData"
 			>
 				<p>No hay resultados...</p>
@@ -18,7 +21,11 @@
 	</div>
 </nz-spin>
 
-<!-- Inicio de la Paginación -->
-<nz-pagination class="text-right mt-2" [(nzPageIndex)]="pageIndex" [nzTotal]="totalItems" [nzPageSize]="20" [nzShowTotal]="totalTemplate" (nzPageIndexChange)="onChangePageIndex()"></nz-pagination>
-<ng-template #totalTemplate let-total> Total {{ total }} items </ng-template>
-<!-- Fin de la Paginación -->
+<div nz-row nzJustify="center">
+	<div nz-col>
+		<!-- Inicio de la Paginación -->
+			<nz-pagination class="text-right mt-2" [(nzPageIndex)]="pageIndex" [nzTotal]="totalItems" [nzPageSize]="20" [nzShowTotal]="totalTemplate" (nzPageIndexChange)="onChangePageIndex()"></nz-pagination>
+			<ng-template #totalTemplate let-total> Total {{ total }} items </ng-template>
+		<!-- Fin de la Paginación -->
+	</div>
+</div>

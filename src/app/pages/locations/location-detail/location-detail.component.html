@@ -1,11 +1,9 @@
 <button (click)="onGoBack()" nz-button nzType="primary" class="m-1">< Volver</button>
-<div *ngIf="episode else loading" class="p-3">
+<div *ngIf="location else loading" class="p-3">
 	<div nz-row class="justify-content-start mt-3">
 		<div class="justify-content-center" nz-col nzSpan="24">
-			<h5 class="text-muted bold text-bold">Nombre: {{ episode.name }}</h5>
-			<p class="text-muted">#ID: {{ episode.id }}</p>
-			<p class="text-muted">#Episodio: {{ episode.episode }}</p>
-			<p>Fecha de emisión: {{ episode.air_date | date }} </p>
+			<h5 class="text-muted bold text-bold">Nombre: {{ location.name }}</h5>
+			<p class="text-muted">#ID: {{ location.id }}</p>
 		</div>
 	</div>
 	<div nz-row class="justify-content-start mt-3">
