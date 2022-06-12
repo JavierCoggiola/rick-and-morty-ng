@@ -1,0 +1,20 @@
+<button (click)="onGoBack()" nz-button nzType="primary" class="m-1"><i nz-icon nzType="back"></i>Volver</button>
+<div *ngIf="character$ | async as character else loading" class="p-3">
+	<nz-row>
+		<div class="image-container">
+			<img [src]="character?.image" />
+		</div>
+	</nz-row>
+	<div nz-row nzJustify="center" class="m-2">
+		<div nz-col nzSpan="24">
+			<h5 class="text-muted bold text-bold">#Name: {{ character.name }}</h5>
+			<p class="text-muted">#Status: {{ character.status | lowercase }}</p>
+			<p class="text-muted">#Gender: {{ character.gender }}</p>
+			<p>Last seen in: {{ character.location.name }} </p>
+		</div>
+	</div>
+</div>
+
+<ng-template #loading>
+	<nz-spin nzSpinning [nzDelay]="10"> </nz-spin>
+</ng-template>

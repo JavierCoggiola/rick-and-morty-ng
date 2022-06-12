@@ -1,0 +1,10 @@
+<nz-card nzHoverable class="card">
+	<nz-card-meta [nzTitle]="episodeTitle" [nzDescription]="episodeDesc"></nz-card-meta>
+</nz-card>
+<ng-template #episodeTitle>
+	<span class="text-muted bold text-bold">{{ episode.name | slice: 0:20}}</span>
+</ng-template>
+<ng-template #episodeDesc>
+	<p>Fecha de emisión: {{ episode.air_date | date }} </p>
+	<small class="text-muted">#Episode ID: {{ episode.id }}</small>
+</ng-template>

@@ -1,0 +1,12 @@
+<nz-card nzHoverable class="card">
+	<nz-card-meta [nzTitle]="locationTitle" [nzDescription]="locationDesc"></nz-card-meta>
+</nz-card>
+<ng-template #locationTitle>
+	<span class="text-muted bold text-bold">{{ location.name | slice: 0:20}}</span>
+</ng-template>
+<ng-template #locationDesc>
+	<p>Tipo: {{ location.type }} </p>
+	<p>Dimensión: {{ location.dimension }} </p>
+	<p>Cant. de residentes: {{ location.residents?.length }} </p>
+	<p>Fecha de creación: {{ location.created | date }} </p>
+</ng-template>

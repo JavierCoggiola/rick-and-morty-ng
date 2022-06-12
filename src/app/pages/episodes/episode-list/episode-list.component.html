@@ -1,0 +1,30 @@
+
+<div nz-row nzJustify="center">
+	<app-search-box [searchPlaceholderText]="searchPlaceholderText" (emitSearchBoxValue)="onChangeSearchEpisodes($event)"></app-search-box>
+</div>
+<nz-spin [nzSpinning]="isLoadingData" [nzDelay]="10">
+	<div nz-row nzJustify="space-around">
+		<div *ngFor="let episode of episodes" (click)="goToEpisodeDetail(episode)" nz-col nzXs="20" nzSm="12" nzMd="8" nzLg="5" nzXl="5" class="m-1 mt-3">
+			<div class="inner-box">
+				<app-episode [episode]="episode"></app-episode>
+			</div>
+		</div>
+		<div
+			nz-col
+			[nzSpan]="24"
+			class="container-notFound"
+			*ngIf="episodes.length <= 0 && !isLoadingData"
+		>
+			<p>No hay resultados...</p>
+		</div>
+	</div>
+</nz-spin>
+
+<div nz-row nzJustify="center">
+	<div nz-col>
+		<!-- Inicio de la Paginación -->
+		<nz-pagination class="text-right mt-2 mb-3" [(nzPageIndex)]="pageIndex" [nzTotal]="totalItems" [nzPageSize]="20" [nzShowTotal]="totalTemplate" (nzPageIndexChange)="onChangePageIndex()"></nz-pagination>
+		<ng-template #totalTemplate let-total> Total {{ total }} items </ng-template>
+		<!-- Fin de la Paginación -->
+	</div>
+</div>

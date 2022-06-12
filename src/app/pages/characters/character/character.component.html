@@ -1,0 +1,14 @@
+<nz-card nzHoverable class="card" [nzCover]="characterImage">
+	<nz-card-meta [nzTitle]="characterTitle" [nzDescription]="characterDesc"></nz-card-meta>
+</nz-card>
+<ng-template #characterImage>
+	<img [alt]="character.name" [src]="character.image" />
+</ng-template>
+<ng-template #characterTitle>
+	<span class="text-muted bold text-bold">{{ character.name | slice: 0:20}}</span>
+</ng-template>
+<ng-template #characterDesc>
+	<p>Género: {{ character.gender }} </p>
+	<p>Ubicación: {{ character.location?.name }} </p>
+	<p>Episodio random: {{ getRandomEpisode(character.episode) }} </p>
+</ng-template>

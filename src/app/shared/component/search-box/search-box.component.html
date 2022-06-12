@@ -1,0 +1,14 @@
+<nz-input-group class="searchBox" [nzSuffix]="suffixIconSearch">
+	<input 
+		type="text"
+		autofocus
+		nz-input
+		#searchField
+		[placeholder]="searchPlaceholderText"
+		[(ngModel)]="searchBoxValue"
+		(ngModelChange)="onChangeSearchBoxValue($event)"
+		nzAllowClear/>
+</nz-input-group>
+<ng-template #suffixIconSearch>
+	<i nz-icon nzType="search"></i>
+</ng-template>
