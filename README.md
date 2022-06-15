@@ -8,8 +8,6 @@ Run `npm install` and after `ng serve` for a dev server. Navigate to `http://loc
 
 ## About
 
-This is a technical test for `Aplazo`.
-
 Angular application (latest version) that consumes the next API Rest
 "https://rickandmortyapi.com/".
 
